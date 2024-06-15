@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
 
 app.post('/api/users', async (req, res) => {
   const name = req.body.username;
-  console.log('Received username: ', username);
+  console.log('Received username: ', name);
 
   try {
     const userJsonDoc = await db.createUser(name);
