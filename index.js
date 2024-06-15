@@ -16,11 +16,11 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/users', async (req, res) => {
-  const username = req.body.username;
+  const name = req.body.username;
   console.log('Received username: ', username);
 
   try {
-    const userJsonDoc = await db.createUser(username);
+    const userJsonDoc = await db.createUser(name);
     const {_id, username} = userJsonDoc;
     res.json({_id, username});
   } catch (err) {
