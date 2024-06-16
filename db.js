@@ -44,10 +44,36 @@ const logExercise = async (userId, description, duration, date) => {
     }
 };
 
-const findUserById = async (userId) => {
+const findUserById = async (userId, from, to, limit) => {
+    console.log('Limit inside findUserById:', limit);
     try {
         const user = await User.findById(userId);
-        return user;
+        if (!user) {
+            throw new Error('User not found');
+        };
+        let filteredLog = user.log;
+        console.log('Initial log count:', filteredLog.length);
+        if (from) {
+            const fromDate = new Date(from);
+            console.log('Filtering logs after:', fromDate);
+            filteredLog = filteredLog.filter(log => new Date(log.date) >= fromDate);
+        };
+        if (to) {
+            const toDate = new Date(to);
+            console.log('Filtering logs before:', toDate);
+            filteredLog = filteredLog.filter(log => new Date(log.date) <= toDate);
+        };
+        if (limit) {
+            console.log('Applying limit:', limit);
+            filteredLog = filteredLog.slice(0, limit);
+        };
+        console.log('Filtered log count:', filteredLog.length);
+        return {
+            _id: userId, 
+            username: user.username, 
+            count: filteredLog.length,
+            log: filteredLog
+        };
     } catch (err) {
         console.log('Error finding the document: ', err);
         throw err;

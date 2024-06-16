@@ -69,10 +69,15 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   };
 });
 
-app.get('/api/users/:_id/logs', async (req, res) => {
-  userId = req.params._id;
+app.get('/api/users/:_id/logs/:from?/:to?/:limit?', async (req, res) => {
+  const userId = req.params._id;
+  const from = req.query.from;
+  const to = req.query.to;
+  const limit = req.query.limit
+  console.log('Limit:', limit);
+
   try {
-    userFound = await db.findUserById(userId);
+    const userFound = await db.findUserById(userId, from, to, limit);
     res.json(userFound);
   } catch (err) {
     console.error('Error handling the request:', err);
