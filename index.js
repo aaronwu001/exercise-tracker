@@ -44,9 +44,25 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
   try {
     const description = req.body.description;
     const duration = req.body.duration;
-    const date = req.body.date;
+    let date;
+    if (req.body.date) {
+      const inputDate = new Date(req.body.date);
+      date = inputDate.toDateString();
+    } else {
+      const currentDate = new Date();
+      date = currentDate.toDateString();
+    }
+
     const updatedUser = await db.logExercise(userId, description, duration, date);
-    res.json(updatedUser);
+    
+    res.json({
+      _id: updatedUser._id, 
+      username: updatedUser.username, 
+      date, 
+      duration, 
+      description
+    });
+
   } catch (err) {
     console.error('Error handling the request:', err);
     res.status(500).json({ error: 'Internal Server Error' });

@@ -11,7 +11,7 @@ const createUser = async (username) => {
     try {
         savedUser = await newUser.save();
         console.log('Saved user: ', savedUser);
-        return savedUser.toJSON();
+        return savedUser;
     } catch (err) {
         console.log('Error saving document: ', err);
         throw err;
@@ -30,10 +30,6 @@ const getAllUsers = async () => {
 
 const logExercise = async (userId, description, duration, date) => {
     try {
-        if (!date) {
-            const currentDate = new Date();
-            const date = currentDate.toDateString();
-        };
         newLog = {description, duration, date}
         const updatedUser = await User.findByIdAndUpdate(
             userId, 
